@@ -92,4 +92,13 @@ export class S98 {
   build(): ArrayBuffer {
     return buildS98(this._obj);
   }
+
+  toJSON(): String {
+    return JSON.stringify(this.toObject(), (k, v) => {
+      if (v instanceof Uint8Array) {
+        return `(${v.length} bytes of data)`;
+      }
+      return v;
+    }, '  ')
+  }
 }

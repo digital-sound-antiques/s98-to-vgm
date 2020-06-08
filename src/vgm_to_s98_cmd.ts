@@ -24,7 +24,7 @@ const optionDefinitions = [
   },
   {
     name: "parse-only",
-    description: "Parse S98 data and show S98 header in JSON. No vgm file is genereated.",
+    description: "Parse VGM data and show VGM header in JSON. No .s98 file is genereated.",
     type: Boolean
   },
   {
