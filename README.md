@@ -1,5 +1,8 @@
 # s98-to-vgm
-S98 to VGM file converter. VGM to S98 conversion is also possible.
+S98 to VGM file converter. VGM to S98 conversion is also possible. 
+
+- YM2612 DAC is not supported yet.
+- YM2608 ADPCM is not mapped to VGM data-block. The ADPCM part can be played limited players (ex. node-spfm). 
 
 # Install
 
