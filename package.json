@@ -1,8 +1,8 @@
 {
   "name": "s98-to-vgm",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "bin": {
     "s98-to-vgm": "bin/s98_to_vgm.js",
     "vgm-to-s98": "bin/vgm_to_s98.js"
@@ -44,5 +44,17 @@
     "typedoc": "^0.15.2",
     "typescript": "^3.4.5"
   },
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/digital-sound-antiques/s98-to-vgm.git"
+  },
+  "keywords": [
+    "spfm",
+    "vgm",
+    "chiptune"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=10.0.0"
+  }
 }
