@@ -1,0 +1,41 @@
+{
+  "name": "s98-to-vgm",
+  "version": "0.9.1",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "s98-to-vgm": "bin/cmd.js"
+  },
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "clean": "rm-cli -ss -r dist",
+    "build": "tsc",
+    "typedoc": "typedoc"
+  },
+  "author": "Mitsutaka Okazaki",
+  "dependencies": {
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.1.0",
+    "encoding-japanese": "^1.0.30",
+    "util": "^0.12.3",
+    "vgm-parser": "^0.8.5"
+  },
+  "devDependencies": {
+    "@types/command-line-args": "^5.0.0",
+    "@types/command-line-usage": "^5.0.1",
+    "@types/encoding-japanese": "^1.0.15",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^12.12.12",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "rm-cli": "^1.4.2",
+    "ts-jest": "^24.2.0",
+    "ts-node": "^8.4.1",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typedoc": "^0.15.2",
+    "typescript": "^3.4.5"
+  },
+  "license": "MIT"
+}
