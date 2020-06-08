@@ -5,8 +5,6 @@ import {
 } from "./s98_object";
 import Encoding from "encoding-japanese";
 
-const TextDecoder = require("util").TextDecoder; // for node.js: load TextDecoder.
-
 function _parseS98TagObject(d: DataView, offset: number): S98TagObject {
 
   if (d.byteLength < offset + 8) {
@@ -83,9 +81,8 @@ export function parseS98(input: ArrayBuffer): S98Object {
     throw new Error("Not a s98 file.");
   }
   const version = d.getUint8(3);
-  const versionString = String.fromCharCode(version);
-  if (versionString != '3') {
-    throw new Error("Unsupported s98 version: ${versionString}.");
+  if (version !== 0x33) {
+    throw new Error(`Unsupported s98 version: '${String.fromCharCode(version)}'.`);
   }
 
   const timerNumerator = d.getUint32(0x04, true);
@@ -95,6 +92,8 @@ export function parseS98(input: ArrayBuffer): S98Object {
   const dataOffset = d.getUint32(0x14, true);
   const loopOffset = d.getUint32(0x18, true);
   const deviceCount = d.getUint32(0x1c, true);
+
+  const relativeLoopOffset = 0 < loopOffset ? (loopOffset - dataOffset) : -1;
 
   const tag = _parseS98TagObject(d, tagOffset);
   const data = new Uint8Array(input.slice(dataOffset));
@@ -122,6 +121,7 @@ export function parseS98(input: ArrayBuffer): S98Object {
     dataOffset,
     data,
     loopOffset,
+    relativeLoopOffset,
     deviceCount,
     devices,
   };

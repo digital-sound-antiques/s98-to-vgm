@@ -84,7 +84,7 @@ function main(argv: string[]) {
   }
 
   const input = options.input || "/dev/stdin";
-  const output = options.output;
+  const output = options.output || "/dev/stdout";
 
   try {
     const buf = fs.readFileSync(input);

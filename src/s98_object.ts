@@ -44,7 +44,8 @@ export type S98Object = {
   tag: S98TagObject;
   dataOffset: number;
   data: Uint8Array;
-  loopOffset: number;
+  loopOffset: number; // relative from file top
+  relativeLoopOffset: number; // relative from data top.
   deviceCount: number;
   devices: S98DeviceObject[];
 }
@@ -69,6 +70,7 @@ export function deepCloneS98Object(arg: S98Object): S98Object {
     dataOffset: arg.dataOffset,
     data: arg.data.slice(0),
     loopOffset: arg.loopOffset,
+    relativeLoopOffset: arg.relativeLoopOffset,
     deviceCount: arg.deviceCount,
     devices: deepCloneS98DeviceList(arg.devices)
   };
@@ -85,7 +87,19 @@ export function createEmptyS98Object(): S98Object {
     dataOffset: 0,
     data: new Uint8Array(),
     loopOffset: 0,
+    relativeLoopOffset: -1,
     deviceCount: 0,
     devices: [],
   };
+}
+
+export function updateOffsets(s98: S98Object): void {
+  s98.version = 0x33; // '3';
+  s98.dataOffset = 0x20 + s98.deviceCount * 16;
+  if (0 <= s98.relativeLoopOffset) {
+    s98.loopOffset = s98.dataOffset + s98.relativeLoopOffset;
+  } else {
+    s98.loopOffset = 0;
+  }
+  s98.tagOffset = s98.dataOffset + s98.data.byteLength;
 }

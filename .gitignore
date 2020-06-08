@@ -10,6 +10,7 @@ node_modules
 
 *.vgz
 *.vgm
+*.s98
 
 dist
 docs

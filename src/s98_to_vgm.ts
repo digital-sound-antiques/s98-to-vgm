@@ -99,10 +99,9 @@ function _buildVGMDataStream(s98: S98): VGMDataStream {
         }
         break;
       case 0xfe:
-        offset++;
         let s = 0, n = 0;
         do {
-          let p = data[offset];
+          let p = data[++offset];
           n |= (p & 0x7f) << s;
           s += 7;
           if (!(p & 0x80)) {
@@ -118,7 +117,7 @@ function _buildVGMDataStream(s98: S98): VGMDataStream {
         break;
       case 0xfd:
         eod = true;
-        stream.push(new VGMEndCommand());
+        stream.push(new VGMEndCommand());        
         break;
       default:
         const cmd = _S98CommandToVGMCommand(s98, d);
@@ -131,7 +130,6 @@ function _buildVGMDataStream(s98: S98): VGMDataStream {
     }
     offset++;
   }
-
   return stream;
 }
 
