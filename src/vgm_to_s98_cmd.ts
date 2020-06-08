@@ -93,7 +93,7 @@ function main(argv: string[]) {
 
     if (options['parse-only']) {
       console.info(JSON.stringify(vgm.toJSON(), (k, v) => {
-        if (k === 'data') {
+        if (k === 'data' && v['byteLength'] != null) {
           return `(${v.byteLength} bytes)`;
         }
         return v;
