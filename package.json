@@ -7,6 +7,12 @@
     "s98-to-vgm": "bin/s98_to_vgm.js",
     "vgm-to-s98": "bin/vgm_to_s98.js"
   },
+  "files": [
+    "README.md",
+    "package.json",
+    "dist",
+    "bin"
+  ],
   "scripts": {
     "prepare": "npm run clean && npm run build",
     "clean": "rm-cli -ss -r dist",
