@@ -91,7 +91,12 @@ function main(argv: string[]) {
     const s98 = S98.parse(toArrayBuffer(buf));
 
     if (options['parse-only']) {
-      console.info(s98.toJSON());
+      console.info(JSON.stringify(s98.toObject(), (k, v) => {
+        if (v instanceof Uint8Array) {
+          return `(${v.length} bytes)`;
+        }
+        return v;
+      }, '  '));
       process.exit(0);
     }
 

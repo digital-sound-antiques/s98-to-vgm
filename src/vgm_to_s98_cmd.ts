@@ -92,7 +92,12 @@ function main(argv: string[]) {
     const vgm = VGM.parse(toArrayBuffer(buf));
 
     if (options['parse-only']) {
-      console.info(JSON.stringify(vgm.toJSON()));
+      console.info(JSON.stringify(vgm.toJSON(), (k, v) => {
+        if (k === 'data') {
+          return `(${v.byteLength} bytes)`;
+        }
+        return v;
+      }, '  '));
       process.exit(0);
     }
 
