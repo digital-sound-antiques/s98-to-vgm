@@ -12,7 +12,7 @@ export type S98TagObject = { [key: string]: string } & {
 
 export type S98DeviceType = number;
 
-function getS98DeviceName(type: S98DeviceType): string {
+export function getS98DeviceName(type: S98DeviceType): string {
   switch (type) {
     case 1: return 'ym2149';
     case 2: return 'ym2203';
