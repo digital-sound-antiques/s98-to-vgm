@@ -1,6 +1,6 @@
 {
   "name": "s98-to-vgm",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "description": "",
   "main": "dist/index.js",
   "bin": {

@@ -1,5 +1,14 @@
-import { S98 } from "./index";
-import { VGM, VGMDataStream, VGMWaitWordCommand, VGMWriteDataCommand, VGMEndCommand, createEmptyGD3TagObject, GD3TagObject } from "vgm-parser";
+import {
+  VGM,
+  VGMDataStream,
+  VGMWaitWordCommand,
+  VGMWriteDataCommand,
+  VGMEndCommand,
+  createEmptyGD3TagObject,
+  GD3TagObject,
+} from "vgm-parser";
+
+import { S98 } from "./s98";
 import { S98TagObject } from "./s98_object";
 
 function _S98CommandToVGMCommand(s98: S98, s98cmd: number): number | undefined {
@@ -108,6 +117,7 @@ function _buildVGMDataStream(s98: S98): VGMDataStream {
             break;
           }
         } while (offset < data.length);
+        n += 2;
         {
           const count_f = (44100 * n * timeBase) + timerRemainings;
           const count = Math.floor(count_f);
@@ -117,7 +127,7 @@ function _buildVGMDataStream(s98: S98): VGMDataStream {
         break;
       case 0xfd:
         eod = true;
-        stream.push(new VGMEndCommand());        
+        stream.push(new VGMEndCommand());
         break;
       default:
         const cmd = _S98CommandToVGMCommand(s98, d);

@@ -41,6 +41,9 @@ function _writeS98Tag(buf: AutoResizeBuffer, byteOffset: number, tag: S98TagObje
 
 export function buildS98(s98: S98Object): ArrayBuffer {
   const buf = new AutoResizeBuffer();
+  if (s98.version != 0x33) {
+    throw new Error("S98 version must be set to '3' (0x33) to build.");
+  }
   updateOffsets(s98);
   let wp = _writeS98Header(buf, s98);
   buf.setData(wp, s98.data);

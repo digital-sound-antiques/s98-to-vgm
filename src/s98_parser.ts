@@ -5,7 +5,28 @@ import {
 } from "./s98_object";
 import Encoding from "encoding-japanese";
 
+function _parseS98SongName(d: DataView, offset: number): S98TagObject {
+  if (offset === 0) {
+    return {};
+  }
+  const buf = [];
+  let index = offset;
+  while (index < d.byteLength) {
+    const v = d.getUint8(index);
+    if (v == 0x00) {
+      break;
+    }
+    buf.push(v);
+    index++;
+  }
+  const title = Encoding.convert(buf, { to: "UNICODE", from: "SJIS", type: "string" }).toString();
+  return { title };
+}
+
 function _parseS98TagObject(d: DataView, offset: number): S98TagObject {
+  if (offset === 0) {
+    return {};
+  }
 
   if (d.byteLength < offset + 8) {
     return {};
@@ -81,34 +102,37 @@ export function parseS98(input: ArrayBuffer): S98Object {
     throw new Error("Not a s98 file.");
   }
   const version = d.getUint8(3);
-  if (version !== 0x33) {
-    throw new Error(`Unsupported s98 version: '${String.fromCharCode(version)}'.`);
+  const versionCode = version - 0x30;
+  if (versionCode < 0 || 3 < versionCode) {
+    throw new Error(`Unsupported s98 version: '${versionCode}'.`);
   }
 
-  const timerNumerator = d.getUint32(0x04, true);
-  const timerDenominator = d.getUint32(0x08, true);
+  const timerNumerator = d.getUint32(0x04, true) || 10;
+  const timerDenominator = d.getUint32(0x08, true) || 1000;
   const compressing = d.getUint32(0x0c, true);
   const tagOffset = d.getUint32(0x10, true);
   const dataOffset = d.getUint32(0x14, true);
   const loopOffset = d.getUint32(0x18, true);
-  const deviceCount = d.getUint32(0x1c, true);
-
   const relativeLoopOffset = 0 < loopOffset ? (loopOffset - dataOffset) : -1;
+  const deviceCount = 3 <= versionCode ? d.getUint32(0x1c, true) : 0;
 
-  const tag = _parseS98TagObject(d, tagOffset);
+  const tag = versionCode < 3 ? _parseS98SongName(d, tagOffset) : _parseS98TagObject(d, tagOffset);
   const data = new Uint8Array(input.slice(dataOffset));
   const devices = [];
-  if (deviceCount == 0) {
+  const maxDevices = versionCode < 3 ? 64 : Math.min(deviceCount, 64);
+  for (let i = 0; i < maxDevices; i++) {
+    const device = _parseS98DeviceObject(d, 0x20 + 0x10 * i);
+    if (device.type === 0) {
+      break;
+    }
+    devices.push(device);
+  }
+  if (devices.length === 0) {
     devices.push({
       type: 4,
       clock: 7987200,
       pan: 0,
     });
-  } else {
-    for (let i = 0; i < deviceCount; i++) {
-      const device = _parseS98DeviceObject(d, 0x20 + 0x10 * i);
-      devices.push(device);
-    }
   }
 
   return {

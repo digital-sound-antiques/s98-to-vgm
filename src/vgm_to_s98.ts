@@ -1,4 +1,13 @@
-import { VGM, VGMWaitCommand, VGMWrite2ACommand, VGMWriteDataCommand, VGMEndCommand, AutoResizeBuffer, buildVGM, VGMDataBlockCommand, VGMSeekPCMCommand } from 'vgm-parser';
+import {
+  VGM,
+  VGMWaitCommand,
+  VGMWrite2ACommand,
+  VGMWriteDataCommand,
+  VGMEndCommand,
+  AutoResizeBuffer,
+  VGMDataBlockCommand,
+  VGMSeekPCMCommand
+} from 'vgm-parser';
 import { S98DeviceObject } from './s98_object';
 import { S98 } from './s98';
 
@@ -87,6 +96,17 @@ function _VGMCommandToS98Command(deviceMap: DeviceMap, cmd: number): number | un
   }
 }
 
+function _writeLength(buf: AutoResizeBuffer, offset: number, count: number): number {
+  let wp = offset;
+  let c = count;
+  while (c >= 0x80) {
+    buf.setUint8(wp++, 0x80 | (c & 0x7f));
+    c >>= 7;
+  }
+  buf.setUint8(wp++, c);
+  return wp - offset;
+}
+
 export function convertVGMToS98(vgm: VGM): S98 {
   const s98 = new S98();
   const deviceMap = _enumerateDevices(vgm);
@@ -111,13 +131,9 @@ export function convertVGMToS98(vgm: VGM): S98 {
       let c = cmd.count;
       if (c === 1) {
         buf.setUint8(wp++, 0xff); // 1SYNC
-      } else {
+      } else if (c > 1) {
         buf.setUint8(wp++, 0xfe); // nSYNC
-        while (c >= 0x80) {
-          buf.setUint8(wp++, 0x80 | (c & 0x7f));
-          c >>= 7;
-        }
-        buf.setUint8(wp++, c);
+        wp += _writeLength(buf, wp, c - 2);
       }
     } else if (cmd instanceof VGMWriteDataCommand) {
       const id = _VGMCommandToS98Command(deviceMap, cmd.cmd);
@@ -138,13 +154,9 @@ export function convertVGMToS98(vgm: VGM): S98 {
         let c = cmd.count;
         if (c === 1) {
           buf.setUint8(wp++, 0xff); // 1SYNC
-        } else {
+        } else if (c > 1) {
           buf.setUint8(wp++, 0xfe); // nSYNC
-          while (c >= 0x80) {
-            buf.setUint8(wp++, 0x80 | (c & 0x7f));
-            c >>= 7;
-          }
-          buf.setUint8(wp++, c);
+          wp += _writeLength(buf, wp, c - 2);
         }
       }
     } else if (cmd instanceof VGMDataBlockCommand) {
