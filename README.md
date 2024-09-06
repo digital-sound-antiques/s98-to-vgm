@@ -7,7 +7,7 @@ S98 to VGM file converter. VGM to S98 conversion is also possible.
 # Install
 
 ```
-$ npm install s98-to-vgm
+$ npm install -g s98-to-vgm
 ```
 
 # S98 to VGM 
