@@ -33,7 +33,7 @@
     "@types/encoding-japanese": "^1.0.15",
     "@types/jest": "^24.0.25",
     "@types/node": "^12.12.12",
-    "jest": "^24.9.0",
+    "jest": "^30.0.5",
     "prettier": "^1.19.1",
     "rm-cli": "^1.4.2",
     "ts-jest": "^26.1.0",
