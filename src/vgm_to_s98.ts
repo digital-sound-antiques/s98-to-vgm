@@ -22,6 +22,7 @@ type DeviceMap = {
   ym2413?: DeviceInfo;
   ym3526?: DeviceInfo;
   ym3812?: DeviceInfo;
+  ymf262?: DeviceInfo;
   sn76489?: DeviceInfo;
 }
 
@@ -64,6 +65,10 @@ function _enumerateDevices(vgm: VGM): DeviceMap {
     res.ym3812 = { id, type: 8, clock: vgm.chips.ym3812.clock, pan: 0 };
     id += 2;
   }
+  if (vgm.chips.ymf262) {
+    res.ymf262 = { id, type: 9, clock: vgm.chips.ymf262.clock, pan: 0 };
+    id += 2;
+  }
   if (vgm.chips.sn76489) {
     res.sn76489 = { id, type: 16, clock: vgm.chips.sn76489.clock, pan: 0 };
     id += 2;
@@ -91,6 +96,9 @@ function _VGMCommandToS98Command(deviceMap: DeviceMap, cmd: number): number | un
       return deviceMap.ym3526?.id;
     case 0x5a:
       return deviceMap.ym3812?.id;
+    case 0x5e:
+    case 0x5f:
+      return deviceMap.ymf262?.id;
     case 0x50:
       return deviceMap.sn76489?.id;
     default:
