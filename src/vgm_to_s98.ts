@@ -78,8 +78,10 @@ function _VGMCommandToS98Command(deviceMap: DeviceMap, cmd: number): number | un
     case 0x55:
       return deviceMap.ym2203?.id;
     case 0x58:
+    case 0x59:
       return deviceMap.ym2612?.id;
     case 0x56:
+    case 0x57:
       return deviceMap.ym2608?.id;
     case 0x54:
       return deviceMap.ym2151?.id;
