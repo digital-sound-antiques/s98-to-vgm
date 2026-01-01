@@ -38,7 +38,7 @@
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
-    "typedoc": "^0.15.2",
+    "typedoc": "^0.28.15",
     "typescript": "^3.4.5"
   },
   "repository": {
