@@ -32,6 +32,8 @@ function _S98CommandToVGMCommand(s98: S98, s98cmd: number): number | undefined {
       return 0x5b;
     case 8: // YM3812
       return 0x5a;
+    case 9: // YMF262
+      return 0x5e + ext;
     case 15: // AY8910
       return 0xa0;
     case 16: // SN76489
@@ -68,7 +70,7 @@ function _buildChipType(s98: S98, vgm: VGM) {
       case 8:
         vgm.chips.ym3812 = { clock: d.clock };
         break;
-      case 8:
+      case 9:
         vgm.chips.ymf262 = { clock: d.clock };
         break;
       case 15:
